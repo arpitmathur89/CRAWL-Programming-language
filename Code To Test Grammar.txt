@@ -1,0 +1,25 @@
+BEGIN
+/* dzx /*
+int a, b = 10
+int d[10]
+ch e[1] 
+foo()
+foo(41)
+do
+ a = a + 1
+while a < 10
+a = (10 + 13)* (14-10)*b/b
+if a = 10
+ b= 1
+elseif a > 20
+  b = 100
+else
+  b= 0
+endif
+
+function int foo() 
+ BEGIN
+ int a 
+ return a
+ END
+END
