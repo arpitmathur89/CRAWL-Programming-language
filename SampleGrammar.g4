@@ -1,4 +1,14 @@
-grammar Sample;
+/**
+ * Define a grammar called Hello
+ 
+grammar Hello;
+r  : 'hello' ID ;         // match keyword hello followed by an identifier
+
+ID : [a-z]+ ;             // match lower-case identifiers
+
+WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+*/
+grammar MyGrammar;
 
 program	
 	:	 'BEGIN' 
@@ -12,7 +22,7 @@ program
 	
 variable
 	: 	  type IDENT (',' IDENT )* ('=' expression | '=' STRING | CH)?
-	| 	  type IDENT '[' INT+ ']' ('=' expression)? 
+	| 	  type IDENT '[' INT+ ']' ('=' expression)? | type IDENT ('=' BOOLEAN)?
 	;
 	
 type    
@@ -36,6 +46,8 @@ statement
 	| ifStat
 	| dowhileStat
 	| funcCallStat
+	| whileStat
+	| displayStat
 	//| forallStat
 	//| exitStat
 	;
@@ -47,6 +59,16 @@ ifStat
 	'endif'	
 	;
 
+whileStat	
+	: 'while'  expression 
+	statement+
+	'endwhile'
+	;
+
+displayStat
+	: 'display' '(' (STRING|IDENT)  ')'
+	;
+	
 forallStat 
 	:	
 	;
@@ -124,17 +146,19 @@ fragment DIGIT 	:	 ('0'..'9') ;
 
 INT	:  	 DIGIT+ ;
 
+BOOLEAN	:	('true'|'false'); 
+
 fragment LETTER  :	 ( 'a'..'z' | 'A'..'Z' );
 
 IDENT 	:	 LETTER LETTER* DIGIT*;
 
-STRING  :	'"' .* '"' ; 
+STRING  :	'"' .*? '"' ; 
 
-CH	:	'\'' . '\'' {setText(getText().substring(1,2))}; 
+CH	:	'\'' . '\'' {setText(getText().substring(1,2));}; 
 
-WS	:	 (' ' | '\n' )+ {$channel = HIDDEN;};
+WS	:	 ((' ' | '\n' | '\r' )+)-> skip;
 
-COMMENT :	 '/*' .*  '/*' {$channel = HIDDEN;};
+COMMENT :	 ('/*' .*?  '/*') -> skip;
  
 
 
