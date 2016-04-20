@@ -1,15 +1,127 @@
-/**
- * Define a grammar called Hello
- 
-grammar Hello;
-r  : 'hello' ID ;         // match keyword hello followed by an identifier
-
-ID : [a-z]+ ;             // match lower-case identifiers
-
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
-*/
+/* NEW GRAMMAR */
 grammar MyGrammar;
+// My New Grammar
 
+program: 'BEGIN'
+		  IDENT* 
+		  variable* 
+		  statement*
+		  function*
+		  'END'
+	;
+	
+variable
+	: type IDENT ('=' expr)?
+	;
+
+statement 
+	: assignment	
+	| ifStat
+	| funcCallStat
+	| whileStat
+	| rtrnStat
+	| stacktype
+	| stackoper
+	;
+	
+ifStat	
+	: 'if' '(' expr ')' statement+
+	('elseif' expr statement+)*
+	('else' statement+ )*
+	'endif'	
+	;
+
+whileStat	
+	: 'while'  expr 
+	statement+
+	'endwhile'
+	;
+
+funcCallStat
+	: IDENT '(' actualParams? ')'
+	;	
+	
+actualParams
+	: expr (',' expr)*
+	;
+	
+function
+	: 'function' type IDENT* '(' parameters? ')'
+	 '{'
+	 variable*
+	 statement*
+	 rtrnStat
+	 '}'
+	;
+	
+rtrnStat
+	: 'return' expr
+	;
+	
+parameters
+	: parameter (',' parameter)*
+	;	
+
+parameter	
+	: type IDENT
+	;
+				
+expr
+	: expr ('/'|'*'|'%') expr
+	| expr ('+'|'-') expr
+	| expr RELOP expr
+	| funcCallStat 
+	| NUMBER
+	| IDENT
+	| BOOLEAN
+	;
+
+assignment
+	:		IDENT '=' expr 
+	;	
+	
+type
+	: 'int'
+	| 'bool'
+	;
+stacktype
+    : 'stack' IDENT
+    ;
+
+stackoper
+	: IDENT '.push' ('('NUMBER')')
+	| IDENT '.pop()'
+	| IDENT '.peek()'
+	| IDENT '.isEmpty()'
+	;
+	
+NUMBER : DIGIT+;
+	
+fragment DIGIT 	:	 ('0'..'9')+ ;	
+
+fragment LETTER  :	 ( 'a'..'z' | 'A'..'Z' );
+
+RELOP : ( '==' | '!=' | '<' | '<=' | '>' | '>=' );
+
+BOOLEAN	:	('true'|'false');
+
+IDENT 	:	 LETTER LETTER* NUMBER*;
+
+WS	:	 ((' ' | '\n' | '\r' | '\t' )+)-> skip;		
+
+COMMENT :	 ('/*' .*?  '/*') -> skip;
+
+
+
+
+
+
+
+
+
+
+
+/* OLD ONE
 program	
 	:	 'BEGIN' 
 		  IDENT* 
@@ -160,5 +272,5 @@ WS	:	 ((' ' | '\n' | '\r' )+)-> skip;
 
 COMMENT :	 ('/*' .*?  '/*') -> skip;
  
-
+*/
 
