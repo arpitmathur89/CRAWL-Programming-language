@@ -1,14 +1,23 @@
 /* NEW GRAMMAR */
 grammar MyGrammar;
+
 // My New Grammar
 
-program: 'BEGIN'
-		  IDENT* 
-		  variable* 
+start : begin (program) end
+	  ;
+
+begin : 'BEGIN'
+	  ;
+	  	
+end   : 'END'
+	  ;
+	  
+program:  IDENT* 
+		  variable*
 		  statement*
 		  function*
-		  'END'
-	;
+	   ;
+
 	
 variable
 	: type IDENT ('=' expr)?
@@ -19,6 +28,7 @@ statement
 	| ifStat
 	| funcCallStat
 	| whileStat
+	| displayStat
 	| rtrnStat
 	| stacktype
 	| stackoper
@@ -37,6 +47,10 @@ whileStat
 	'endwhile'
 	;
 
+displayStat
+	: 'display' '(' (STRING|IDENT)  ')'
+	;
+	
 funcCallStat
 	: IDENT '(' actualParams? ')'
 	;	
@@ -107,9 +121,12 @@ BOOLEAN	:	('true'|'false');
 
 IDENT 	:	 LETTER LETTER* NUMBER*;
 
+STRING  :	'"' .*? '"' ; 
+
 WS	:	 ((' ' | '\n' | '\r' | '\t' )+)-> skip;		
 
 COMMENT :	 ('/*' .*?  '/*') -> skip;
+
 
 
 
