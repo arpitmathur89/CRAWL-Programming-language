@@ -1,0 +1,23 @@
+BEGIN
+mov a,5
+mov b,6
+mov val,1
+add a,b
+mov a,c
+
+
+start fact:
+mov n, e
+mov r, 1
+loop: Mul r,n
+	  Sub n,1
+	  jge n,1,loop
+	  PRINT r
+	  ret	
+end fact
+
+
+start main:
+mov e, 10
+call fact
+END
