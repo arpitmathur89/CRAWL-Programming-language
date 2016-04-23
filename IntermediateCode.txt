@@ -1,23 +1,24 @@
 BEGIN
 mov a,5
 mov b,6
-mov val,1
+mov val,true
 add a,b
-mov a,c
+mov c,a
 
 
-start fact:
-mov n, e
+decl fact int a
+mov n, a
 mov r, 1
-loop: Mul r,n
+loop: 
+	  Mul r,n
 	  Sub n,1
 	  jge n,1,loop
 	  PRINT r
-	  ret	
-end fact
+	  ret 0	
 
 
-start main:
-mov e, 10
-call fact
+
+decl main
+call fact 10
+ret 0
 END
