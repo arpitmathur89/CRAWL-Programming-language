@@ -1,0 +1,28 @@
+BEGIN
+int a = 5
+int b = 6
+bool c = true
+int e
+int f = a + b
+int c = a - b
+int d = e * 6
+int n = 2
+while( n < 7 )
+	n = n + 2
+endwhile
+
+display(b)
+
+if ( n == 1 )
+  a = b+c
+else
+	a = 9
+endif  
+
+
+main(7)
+function int main(int a){
+a = 5
+return 0
+}
+END
