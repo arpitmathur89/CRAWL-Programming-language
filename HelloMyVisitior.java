@@ -1,6 +1,4 @@
 import org.stringtemplate.v4.*;
-
-
 import java.io.*;
 
 public class HelloMyVisitior extends HelloBaseVisitor<Integer>{
@@ -228,6 +226,27 @@ public class HelloMyVisitior extends HelloBaseVisitor<Integer>{
 		int num = visit(ctx.pL);
 		System.out.print(num + "\n");
 		//visit(ctx.);
+		return 0;
+	}
+	
+	@Override
+	public Integer visitStacktype(HelloParser.StacktypeContext ctx) {
+		//visitChildren(ctx);
+		System.out.print("STACK " + ctx.ID.getText()+ "\n");
+		
+		return 0;
+	}
+	
+	@Override
+	public Integer visitStackoper(HelloParser.StackoperContext ctx) {
+		if(ctx.getChild(1).getText().contains(".push"))
+		 System.out.println(ctx.PUSH.getText() + ".push" + " " + ctx.StackNumber.getText());
+		if(ctx.getChild(1).getText().equals(".pop()"))
+			System.out.println(ctx.POP.getText() + ".pop");
+		if(ctx.getChild(1).getText().equals(".peek()"))
+			System.out.println(ctx.PEEK.getText() + ".peek");
+		else if(ctx.getChild(1).getText().equals(".isEmpty()"))
+			System.out.println(ctx.EMPTY.getText() + ".isEmpty");
 		return 0;
 	}
 	
