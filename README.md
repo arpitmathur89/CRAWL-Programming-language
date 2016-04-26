@@ -1,2 +1,2 @@
-# SER502---Team-25
-A new programming language for course SER502 - Languages and Programming Paradigms
+# CRAWL Programming language
+A new programming language for SER502 - Languages and Programming Paradigms
