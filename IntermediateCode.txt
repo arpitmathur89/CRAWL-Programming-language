@@ -1,24 +1,40 @@
 BEGIN
+STACK s
+s.push 5
+s.push 7
+s.pop
+s.peek
+s.isEmpty
+mov g,0
+mov e,0
+mov temp,a
+add temp,c
+mov f,temp
+del temp
+mov temp,a
+sub temp,b
+mov c,temp
+del temp
+mov temp,e
+mov temp,6
+mov d,temp
+del temp
+mov n,2
+WHILE n < 7
+mov temp,n
+add temp,2
+mov n,temp
+EndWhile
+disp b
+CHK n == 1
+mov temp,b
+add temp,c
+mov a,temp
+EndIf
+mov a,9
+EndIfElse
+call dance 7
+decl main int a 
 mov a,5
-mov b,6
-mov val,true
-add a,b
-mov c,a
-
-
-decl fact int a
-mov n, a
-mov r, 1
-loop: 
-	  Mul r,n
-	  Sub n,1
-	  jge n,1,loop
-	  PRINT r
-	  ret 0	
-
-
-
-decl main
-call fact 10
-ret 0
+ret
 END
