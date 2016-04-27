@@ -1,4 +1,3 @@
-import org.stringtemplate.v4.*;
 import java.io.*;
 
 public class MyVisitor extends MyGrammarBaseVisitor<Integer> {
@@ -45,9 +44,6 @@ public class MyVisitor extends MyGrammarBaseVisitor<Integer> {
 			e.printStackTrace();
 		}
 		System.out.println("END");
-		ST temp = new ST("END");
-		String t = temp.render();
-		intermediate += t;
 		//System.out.println(intermediate);
 		return 0;				
 	}
