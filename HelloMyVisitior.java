@@ -109,17 +109,19 @@ public class HelloMyVisitior extends HelloBaseVisitor<Integer>{
 		}
 		return num;
 	}
+	
+	
 	@Override
 	public Integer visitMUL(HelloParser.MULContext ctx) {
 		
 		if(ctx.getChild(1).getText().equals("*")){
-		System.out.println("mov"+" "+"temp,"+ ctx.L.getText());
-		System.out.println("mul"+" "+"temp"+","+ ctx.R.getText());
+		System.out.println("mov"+" "+"temp,"+ ctx.mL.getText());
+		System.out.println("mul"+" "+"temp"+","+ ctx.mR.getText());
 		
 		}
 		else if(ctx.getChild(1).getText().equals("/")){
-			System.out.println("mov"+" "+"temp,"+ ctx.L.getText());
-			System.out.println("div"+" "+"temp"+","+ ctx.R.getText());
+			System.out.println("mov"+" "+"temp,"+ ctx.mL.getText());
+			System.out.println("div"+" "+"temp"+","+ ctx.mR.getText());
 		}
 		return 0;
 	}
@@ -129,12 +131,12 @@ public class HelloMyVisitior extends HelloBaseVisitor<Integer>{
 		// TODO Auto-generated method stub
 		
 		if(ctx.getChild(1).getText().equals("+")){
-		System.out.println("mov"+" "+"temp,"+ ctx.L.getText());
-		System.out.println("add"+" "+"temp"+","+ ctx.R.getText());		
+		System.out.println("mov"+" "+"temp,"+ ctx.aL.getText());
+		System.out.println("add"+" "+"temp"+","+ ctx.aR.getText());		
 		}
 		else if(ctx.getChild(1).getText().equals("-")){
-			System.out.println("mov"+" "+"temp,"+ ctx.L.getText());
-			System.out.println("sub"+" "+"temp"+","+ ctx.R.getText());
+			System.out.println("mov"+" "+"temp,"+ ctx.aL.getText());
+			System.out.println("sub"+" "+"temp"+","+ ctx.aR.getText());
 		}
 		return 0;
 	}
