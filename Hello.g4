@@ -59,7 +59,7 @@ whileStat
 	;
 
 displayStat
-	: 'display' '(' (id= IDENT)  ')'
+	: 'display' '(' id= ( IDENT | STRING ) ')'
 	;
 	
 funcCallStat
@@ -110,14 +110,14 @@ type
 	| 'bool'
 	;
 stacktype
-    : 'stack' IDENT
+    : 'stack' ID = IDENT
     ;
 
 stackoper
-	: IDENT '.push' ('('NUMBER')')
-	| IDENT '.pop()'
-	| IDENT '.peek()'
-	| IDENT '.isEmpty()'
+	: PUSH = IDENT '.push' ('('StackNumber = NUMBER')')
+	| POP = IDENT '.pop()'
+	| PEEK = IDENT '.peek()'
+	| EMPTY = IDENT '.isEmpty()'
 	;
 	
 NUMBER : DIGIT+;

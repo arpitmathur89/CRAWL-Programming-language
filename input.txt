@@ -2,6 +2,18 @@ BEGIN
 int a = 5
 int b = 6
 bool c = true
+bool g = false
+stack s
+s.push(5)
+s.push(7)
+s.pop()
+s.peek()
+s.isEmpty()
+function int main(int a){
+dance(7)
+a = 5
+bool g = false
+
 int e
 int f = a + b
 int c = a - b
@@ -11,6 +23,7 @@ while( n < 7 )
 	n = n + 2
 endwhile
 
+
 display(b)
 
 if ( n == 1 )
@@ -19,10 +32,57 @@ else
 	a = 9
 endif  
 
-
-main(7)
-function int main(int a){
-a = 5
 return 0
 }
+function int dance(int dan){
+display("just testing")
+return 0
+}
+
+
+
+
+
+
+
+/*
+int a = 5
+int b = 6
+bool val = true
+int c = a + b
+
+stack s
+s.push(5)
+s.pop()
+s.isEmpty()
+s.peek()
+
+
+display(c)
+
+function int factrecur(int n){
+	int result
+	if (n == 1)		
+	 return 1
+	else
+	 result = factrecur(n-1) * n
+	endif 
+    return result
+}
+
+function int fact(int n){
+	int result
+	  while n > 1
+	   result = result * n
+	   n = n - 1
+	  endwhile
+	return result	
+}
+
+function int main(){
+fact(5)
+factrecur(6)
+return 0
+}
+*/
 END
