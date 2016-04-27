@@ -1,40 +1,67 @@
 BEGIN
+load 5
+store a
+load 6
+store b
+load 1
+store c
+load 0
+store g
+load 1
+store n
+WHILE n == 3
+load 1
+load n
+add
+store n
+EndWhile
 STACK s
 s.push 5
 s.push 7
 s.pop
 s.peek
 s.isEmpty
-mov g,0
-mov e,0
-mov temp,a
-add temp,c
-mov f,temp
-del temp
-mov temp,a
-sub temp,b
-mov c,temp
-del temp
-mov temp,e
-mov temp,6
-mov d,temp
-del temp
-mov n,2
-WHILE n < 7
-mov temp,n
-add temp,2
-mov n,temp
+decl main int a 
+call dance 7
+mov a,5
+load 0
+store g
+load 0
+store e
+load a
+load b
+add
+store f
+load b
+load a
+sub
+store c
+load e
+load 6
+mul
+store d
+load 1
+store n
+WHILE n == 1
+load 1
+load n
+add
+store n
 EndWhile
 disp b
+
 CHK n == 1
-mov temp,b
-add temp,c
-mov a,temp
+Cond True
+load b
+load c
+add
+store a
 EndIf
+Cond False
 mov a,9
 EndIfElse
-call dance 7
-decl main int a 
-mov a,5
+ret
+decl dance int dan 
+disp "just testing"
 ret
 END
