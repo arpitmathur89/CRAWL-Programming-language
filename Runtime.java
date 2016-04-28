@@ -89,12 +89,12 @@ public static void parseGlobal(String code[]){
 		    		int right = GlobalSt.pop();
 		    		if(right != 0)
 		    		GlobalSt.push(left / right);
-		    		else 
+		    		else {
 		    			System.out.println("Divide by zero error");
-		    		System.exit(0);
+		    		   System.exit(0);
 		    	}
-       	    	
-		    	if(code[ip].contains("decl")) {
+		    	}
+		    	else if(code[ip].contains("decl")) {
 		    		
 		    		String values[]= code[ip].split(" ");
 		    		String fname = values[1];
@@ -103,11 +103,14 @@ public static void parseGlobal(String code[]){
 		    		
 		    		do{
 		    			ip+=1;
-		    			functionBody.add(code[ip]);
+		    			functionBody.add(code[ip].toString());
 		    		}while(!code[ip].contains("ret"));
 		    		
 		    		String[] fBody = functionBody.toArray(new String[0]);
-		    		//Runtime.parseFunctions(fBody);
+		    		for (String s : fBody) {
+					      System.out.println(s);
+					    }
+		    		Runtime.parseFunctions(fBody);
 		    		
 		    	}
 		    	if(code[ip].contains("STACK")){
@@ -159,19 +162,18 @@ public static void parseGlobal(String code[]){
 	
 public static void parseFunctions(String[] body){
 	
-	
 	for(int ip=0; ip<body.length; ip++){
 		
 		if(body[ip].contains("disp")){
 			String display[]= body[ip].split(" ");
 			
-    		if(display[1].contains("\" "))
+    		if(display[1].matches(" [a-z]+ "))
     		{
     			for(int j= 1; j<display.length;j++)
     				System.out.println(display[j]);
     		}	
     		else{
-    		    System.out.println(localSymbolTable.get(display[1]));
+    		   // System.out.println(localSymbolTable.get(display[1]));
     		}
 		}
 		
@@ -210,11 +212,11 @@ public static void parseFunctions(String[] body){
     		int right = localSt.pop();
     		if(right != 0)
     		localSt.push(left / right);
-    		else 
+    		else {
     			System.out.println("Divide by zero error");
-    		System.exit(0);
+    		    System.exit(0);
     	}
-	    	
+	} 	
 		if(body[ip].contains("WHILE")){  		
     		whileFlag=true;	
     		do{
@@ -223,6 +225,9 @@ public static void parseFunctions(String[] body){
     		}while(!body[ip].contains("EndWhile"));
     		
     		String[] whileLoopBody = whileBody.toArray(new String[0]);
+    		 for (String s : whileLoopBody) {
+			      System.out.println(s);
+			    }
    			Runtime.parseWhileLoop(whileLoopBody);
 		
     	}
@@ -238,7 +243,7 @@ public static void parseFunctions(String[] body){
 	     {
 			Boolean cond = false;
 	    	
-  	    	if(body[ip].contains("load") && whileFlag){
+  	    	if(body[ip].contains("load")){
 	    		
 	    		String values[]= body[ip].split(" ");
 	    		String value = values[values.length-1];
@@ -258,31 +263,31 @@ public static void parseFunctions(String[] body){
 	    		}
 	    		
 	    	}
-	    	else if(body[ip].contains("store") && whileFlag){
+	    	else if(body[ip].contains("store")){
 	    		
 	    		String values[]= body[ip].split(" ");
 	    		String value = values[values.length-1];
 	    		localSymbolTable.put(value, localSt.pop().toString());
 	    			 //key value pair
 	    	}
-	    	else if(body[ip].contains("add") && whileFlag){
+	    	else if(body[ip].contains("add")){
 	    		localSt.push(localSt.pop() + localSt.pop());
-	    	}else if(body[ip].contains("sub") && whileFlag){
+	    	}else if(body[ip].contains("sub")){
 	    		localSt.push(localSt.pop() - localSt.pop());
-	    	}else if(body[ip].contains("mul")&& whileFlag){
+	    	}else if(body[ip].contains("mul")){
 	    		localSt.push(localSt.pop() * localSt.pop());
-	    	}else if(body[ip].contains("div")&& whileFlag){
+	    	}else if(body[ip].contains("div")){
 	    		
 	    		int left = localSt.pop();
 	    		int right = localSt.pop();
 	    		if(right != 0)
 	    		localSt.push(left / right);
-	    		else 
+	    		else {
 	    			System.out.println("Divide by zero error");
-	    		System.exit(0);
+	    		    System.exit(0);
 	    	
 	    	}
-  	    	
+	     }
   	    	
   	    	if(body[ip].contains("LE") ||body[ip].contains("GE") ||body[ip].contains("GEQ") ||body[ip].contains("LEQ")
   	    			||body[ip].contains("EQ") ||body[ip].contains("NEQ")){
@@ -324,7 +329,7 @@ public static void parseFunctions(String[] body){
   	    		if(cond){
   	    			do{
   	    				ip+=1;
-  	    				if(body[ip].contains("load") && whileFlag){
+  	    				if(body[ip].contains("load")){
   	    		    		
   	    		    		String values[]= body[ip].split(" ");
   	    		    		String value = values[values.length-1];
@@ -339,30 +344,30 @@ public static void parseFunctions(String[] body){
   	    		    		}
   	    		    		
   	    		    	}
-  	    		    	else if(body[ip].contains("store") && whileFlag){
+  	    		    	else if(body[ip].contains("store")){
   	    		    		
   	    		    		String values[]= body[ip].split(" ");
   	    		    		String value = values[values.length-1];
   	    		    		localSymbolTable.put(value, localSt.pop().toString());
   	    		    			 //key value pair
   	    		    	}
-  	    		    	else if(body[ip].contains("add") && whileFlag){
+  	    		    	else if(body[ip].contains("add")){
   	    		    		localSt.push(localSt.pop() + localSt.pop());
-  	    		    	}else if(body[ip].contains("sub") && whileFlag){
+  	    		    	}else if(body[ip].contains("sub")){
   	    		    		localSt.push(localSt.pop() - localSt.pop());
-  	    		    	}else if(body[ip].contains("mul")&& whileFlag){
+  	    		    	}else if(body[ip].contains("mul")){
   	    		    		localSt.push(localSt.pop() * localSt.pop());
-  	    		    	}else if(body[ip].contains("div")&& whileFlag){
+  	    		    	}else if(body[ip].contains("div")){
   	    		    		
   	    		    		int left = localSt.pop();
   	    		    		int right = localSt.pop();
   	    		    		if(right != 0)
   	    		    		localSt.push(left / right);
-  	    		    		else 
+  	    		    		else {
   	    		    			System.out.println("Divide by zero error");
-  	    		    		System.exit(0);
+  	    		    		    System.exit(0);
   	    		    	}
-  	    				
+  	    		    	}
   	    			}while(!body[ip].contains("gotowhile"));
   	  	    		
   	  	    		
@@ -375,11 +380,7 @@ public static void parseFunctions(String[] body){
   	    		}
   	    		
   	    	}
-  	    	
-  	   
-  	    	
-  	    	
-		
+
 	     }
 	
 	}
