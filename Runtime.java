@@ -12,6 +12,8 @@ public class Runtime {
   
 	public static HashMap<String, String> globalSymbolTable= new HashMap<String, String>();
     public static Stack<Integer> GlobalSt = new Stack<Integer>();	
+    public static HashMap<String, String> localSymbolTable= new HashMap<String, String>();
+    public static Stack<Integer> localSt = new Stack<Integer>();	
     public static Boolean whileFlag = false;
     public static ArrayList<String> whileBody = new ArrayList<String>();
     public static ArrayList<String> functionBody = new ArrayList<String>();
@@ -82,28 +84,14 @@ public static void parseGlobal(String code[]){
 		    	}else if(code[ip].contains("mul")&& !whileFlag){
 		    		GlobalSt.push(GlobalSt.pop() * GlobalSt.pop());
 		    	}else if(code[ip].contains("div")&& !whileFlag){
-		    		GlobalSt.push(GlobalSt.pop() / GlobalSt.pop());
-		    	}
-       	    	
-       	    	
-		    	if(code[ip].contains("WHILE")){
 		    		
-		    		String values[]= code[ip].split(" ");
-		    		System.out.println("val 1 =" + values[1] + "operator => " + values[2] + "val2 =" + values[3]);
-		    		Leftvar = values[1]; 
-		    		Relop = values[2];
-		    		Rightvar = Integer.parseInt(values[3]);
-		    		whileFlag=true;	
-		    		
-		    		do{
-		    			ip+=1;
-		    			whileBody.add(code[ip]);
-		    		}while(!code[ip].contains("EndWhile"));
-		    		
-		    		String[] whileLoopBody = whileBody.toArray(new String[0]);
-//		    		while(Integer.parseInt(globalSymbolTable.get(Leftvar)) != Rightvar)
-//		    			Runtime.parseWhileLoop(whileLoopBody, Leftvar, Relop, Rightvar);
-	    		
+		    		int left = GlobalSt.pop();
+		    		int right = GlobalSt.pop();
+		    		if(right != 0)
+		    		GlobalSt.push(left / right);
+		    		else 
+		    			System.out.println("Divide by zero error");
+		    		System.exit(0);
 		    	}
        	    	
 		    	if(code[ip].contains("decl")) {
@@ -171,6 +159,7 @@ public static void parseGlobal(String code[]){
 	
 public static void parseFunctions(String[] body){
 	
+	
 	for(int ip=0; ip<body.length; ip++){
 		
 		if(body[ip].contains("disp")){
@@ -182,21 +171,72 @@ public static void parseFunctions(String[] body){
     				System.out.println(display[j]);
     		}	
     		else{
-    		    System.out.println(globalSymbolTable.get(display[1]));
+    		    System.out.println(localSymbolTable.get(display[1]));
     		}
 		}
-			
+		
+		if(body[ip].contains("load") && !whileFlag){
+    		
+    		String values[]= body[ip].split(" ");
+    		String value = values[values.length-1];
+    		if(value.matches("[0-9]+"))
+    		{
+    			localSt.push(Integer.parseInt(value));
+    		    System.out.println(localSt);
+    		}
+    		else
+    		{
+    			localSt.push(Integer.parseInt(localSymbolTable.get(value)));
+    			
+    		}
+    		
+    	}
+    	else if(body[ip].contains("store") && !whileFlag){
+    		
+    		String values[]= body[ip].split(" ");
+    		String value = values[values.length-1];
+    		localSymbolTable.put(value, localSt.pop().toString());
+    			 //key value pair
+    	}
+    	else if(body[ip].contains("add") && !whileFlag){
+    		localSt.push(localSt.pop() + localSt.pop());
+    	}else if(body[ip].contains("sub") && !whileFlag){
+    		localSt.push(localSt.pop() - localSt.pop());
+    	}else if(body[ip].contains("mul")&& !whileFlag){
+    		localSt.push(localSt.pop() * localSt.pop());
+    	}else if(body[ip].contains("div")&& !whileFlag){
+    		
+    		int left = localSt.pop();
+    		int right = localSt.pop();
+    		if(right != 0)
+    		localSt.push(left / right);
+    		else 
+    			System.out.println("Divide by zero error");
+    		System.exit(0);
+    	}
+	    	
+		if(body[ip].contains("WHILE")){  		
+    		whileFlag=true;	
+    		do{
+    			ip+=1;
+    			whileBody.add(body[ip]);
+    		}while(!body[ip].contains("EndWhile"));
+    		
+    		String[] whileLoopBody = whileBody.toArray(new String[0]);
+   			Runtime.parseWhileLoop(whileLoopBody);
+		
+    	}
 		}
 	}
 
 
-	public static void parseWhileLoop(String body[], String l, String o, int r){
+	public static void parseWhileLoop(String body[]){
 		
-		Stack<Integer> WhileSt = new Stack<Integer>();
-		//HashMap<String, String> whileSymbolTable= new HashMap<String, String>();
+		int count=0;
 		
 		for(int ip =0; ip<body.length;ip++)
 	     {
+			Boolean cond = false;
 	    	
   	    	if(body[ip].contains("load") && whileFlag){
 	    		
@@ -204,12 +244,16 @@ public static void parseFunctions(String[] body){
 	    		String value = values[values.length-1];
 	    		if(value.matches("[0-9]+"))
 	    		{
-	    			WhileSt.push(Integer.parseInt(value));
-	    		    //System.out.println(WhileSt);
+	    			localSt.push(Integer.parseInt(value));
+	    		    //System.out.println(localSt);
+	    		}
+	    		else if(value.matches("[a-z]+")){
+	    			localSt.push(Integer.parseInt(localSymbolTable.get(value)));
+	    			
 	    		}
 	    		else
 	    		{
-                        WhileSt.push(Integer.parseInt(globalSymbolTable.get(value)));
+                        localSt.push(Integer.parseInt(globalSymbolTable.get(value)));
 	    			
 	    		}
 	    		
@@ -218,18 +262,123 @@ public static void parseFunctions(String[] body){
 	    		
 	    		String values[]= body[ip].split(" ");
 	    		String value = values[values.length-1];
-	    		globalSymbolTable.put(value, WhileSt.pop().toString());
+	    		localSymbolTable.put(value, localSt.pop().toString());
 	    			 //key value pair
 	    	}
 	    	else if(body[ip].contains("add") && whileFlag){
-	    		WhileSt.push(WhileSt.pop() + WhileSt.pop());
+	    		localSt.push(localSt.pop() + localSt.pop());
 	    	}else if(body[ip].contains("sub") && whileFlag){
-	    		WhileSt.push(WhileSt.pop() - WhileSt.pop());
+	    		localSt.push(localSt.pop() - localSt.pop());
 	    	}else if(body[ip].contains("mul")&& whileFlag){
-	    		WhileSt.push(WhileSt.pop() * WhileSt.pop());
+	    		localSt.push(localSt.pop() * localSt.pop());
 	    	}else if(body[ip].contains("div")&& whileFlag){
-	    		WhileSt.push(WhileSt.pop() / WhileSt.pop());
+	    		
+	    		int left = localSt.pop();
+	    		int right = localSt.pop();
+	    		if(right != 0)
+	    		localSt.push(left / right);
+	    		else 
+	    			System.out.println("Divide by zero error");
+	    		System.exit(0);
+	    	
 	    	}
+  	    	
+  	    	
+  	    	if(body[ip].contains("LE") ||body[ip].contains("GE") ||body[ip].contains("GEQ") ||body[ip].contains("LEQ")
+  	    			||body[ip].contains("EQ") ||body[ip].contains("NEQ")){
+  	    		
+  	    		String op = body[ip].toString();
+  	    		
+  	    		switch(op){
+  	    		
+  	    		case "LE" :    
+  	    			if(localSt.pop() >= localSt.pop())
+  	    				count++;
+  	    				cond=true;
+  	    				System.out.println(count);
+  	    				break;
+  	    		case "LEQ" :	   
+  	    			if(localSt.pop() > localSt.pop())
+  	    				cond=true;
+  	    			break;
+  	    		case "GE" :          
+  	    			if(localSt.pop() <= localSt.pop())
+  	    				cond=true;
+  	    			break;
+  	    		case "GEQ" :   
+  	    			if(localSt.pop() < localSt.pop())
+  	    				cond=true;
+  	    			break;
+  	    		case "EQ" :         
+  	    			if(localSt.pop() == localSt.pop())
+  	    				cond=true;
+  	    			break;
+  	    		case "NEQ" :      
+  	    			if(localSt.pop() != localSt.pop())
+  	    				cond=true;
+  	    			break;
+  	    		default : System.out.println("Invalid operator"); break;	
+  	    		
+  	    		}
+  	    		
+  	    		if(cond){
+  	    			do{
+  	    				ip+=1;
+  	    				if(body[ip].contains("load") && whileFlag){
+  	    		    		
+  	    		    		String values[]= body[ip].split(" ");
+  	    		    		String value = values[values.length-1];
+  	    		    		if(value.matches("[0-9]+"))
+  	    		    		{
+  	    		    			localSt.push(Integer.parseInt(value));
+  	    		    		    //System.out.println(localSt);
+  	    		    		}
+  	    		    		else{
+  	    		    			localSt.push(Integer.parseInt(localSymbolTable.get(value)));
+  	    		    			
+  	    		    		}
+  	    		    		
+  	    		    	}
+  	    		    	else if(body[ip].contains("store") && whileFlag){
+  	    		    		
+  	    		    		String values[]= body[ip].split(" ");
+  	    		    		String value = values[values.length-1];
+  	    		    		localSymbolTable.put(value, localSt.pop().toString());
+  	    		    			 //key value pair
+  	    		    	}
+  	    		    	else if(body[ip].contains("add") && whileFlag){
+  	    		    		localSt.push(localSt.pop() + localSt.pop());
+  	    		    	}else if(body[ip].contains("sub") && whileFlag){
+  	    		    		localSt.push(localSt.pop() - localSt.pop());
+  	    		    	}else if(body[ip].contains("mul")&& whileFlag){
+  	    		    		localSt.push(localSt.pop() * localSt.pop());
+  	    		    	}else if(body[ip].contains("div")&& whileFlag){
+  	    		    		
+  	    		    		int left = localSt.pop();
+  	    		    		int right = localSt.pop();
+  	    		    		if(right != 0)
+  	    		    		localSt.push(left / right);
+  	    		    		else 
+  	    		    			System.out.println("Divide by zero error");
+  	    		    		System.exit(0);
+  	    		    	}
+  	    				
+  	    			}while(!body[ip].contains("gotowhile"));
+  	  	    		
+  	  	    		
+  	  	    	}
+  	    		
+  	    		if(body[ip].contains("gotowhile")){
+  	    			
+  	    			ip = 0;
+  	    			
+  	    		}
+  	    		
+  	    	}
+  	    	
+  	   
+  	    	
+  	    	
 		
 	     }
 	
