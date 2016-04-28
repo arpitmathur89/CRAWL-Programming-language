@@ -7,16 +7,19 @@ ret
 decl fact int a 
 load 1
 store  b
-WHILE 
+
+CHK 
 load a
 load 1
-GEQ
+EQ
 cond true
 load b
 load a
 mul
 store b
-gotowhile
-EndWhile
+EndIf
+Cond False
+
 ret
+EndIfElse
 END
