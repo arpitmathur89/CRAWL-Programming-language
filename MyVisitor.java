@@ -1,9 +1,7 @@
-import org.stringtemplate.v4.*;
 import java.io.*;
 
-public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
+public class MyVisitor extends MyGrammarBaseVisitor<Integer>{
 	
-	public static String intermediate;
 	FileWriter file;
 	BufferedWriter output;
 	
@@ -34,112 +32,77 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	
 	@Override
 	public Integer visitEnd(MyGrammarParser.EndContext ctx) {
-		//super.visitEnd(ctx);
+		
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
 			output.write("END\n");
 			output.close();
+			System.out.println("END");
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
-		System.out.println("END");
-		//System.out.println(intermediate);
+		
+		
 		return 0;				
 	}
 	
 	@Override
 	public Integer visitProgram(MyGrammarParser.ProgramContext ctx) {
-		// TODO Auto-generated method stub
+		
 		visitChildren(ctx);
 		return 0;
 	}
 	
 	@Override
 	public Integer visitVariable(MyGrammarParser.VariableContext ctx) {
-		// TODO Auto-generated method stub
 		
-		if(ctx.getChildCount()== 4){
-			if(ctx.E.children.size()<2){
-				//System.out.println(ctx.t.getText());
-				if(ctx.t.getText().equals("int")){
-					try{
-						file = new FileWriter("intermediatecode.txt",true);
-						output = new BufferedWriter(file);
-					String var = ctx.id.getText();
-					int num = visit(ctx.E);
-					output.write("load"+" "+Integer.toString(num));
-					output.write("\n");
-					
-					output.write("store" + " " + var);
-					output.write("\n");
-					//System.out.println("load"+" "+Integer.toString(num));
-					System.out.println("load" + " " + Integer.toString(num));
-					System.out.println("store"+" "+var);
-					//output.write("\n");
-					output.close();
-					}catch(IOException e){
-						e.printStackTrace();
-					}						
-					}
-				else if(ctx.t.getText().equals("bool"))
-					{
-					
-					String var = ctx.id.getText();
-					int num = visit(ctx.E);					
-					
-					try{
-						file = new FileWriter("intermediatecode.txt",true);
-						output = new BufferedWriter(file);
-						output.write("load"+" "+Integer.toString(num));
-						output.write("\n");
-						output.write("store" + " " + var);
-						output.write("\n");
-						//System.out.println("load"+" "+Integer.toString(num));
-						System.out.println("load" + " " + Integer.toString(num));
-						System.out.println("store"+" "+var);
-						System.out.print("\n");
-					output.close();
-					}catch(IOException e){
-						e.printStackTrace();
-					}	
-				}
-			}else{			
-				visit(ctx.E);
-				try{
-					file = new FileWriter("intermediatecode.txt",true);
-					output = new BufferedWriter(file);
-				String var = ctx.id.getText();
-				output.write("store"+" "+var);
-				output.write("\n");
-				System.out.println("store"+" "+var);
-				output.close();
-			}catch(IOException e){
-				e.printStackTrace();
-			}				
-		}		
-		}
-		else if(ctx.getChildCount()== 2){
-			
-				String var = ctx.id.getText();
-				int num = 0;
-				try{
-					file = new FileWriter("intermediatecode.txt",true);
-					output = new BufferedWriter(file);
+		if((ctx.getChildCount()== 2)){
+			String var = ctx.id.getText();
+			int num = 0;
+			try{
+				file = new FileWriter("intermediatecode.txt",true);
+				output = new BufferedWriter(file);
 				output.write("load"+" "+num);
 				output.write("\n");
 				output.write("store"+" "+var);
 				output.write("\n");
 				System.out.println("load"+" "+num);	
-				System.out.println("load"+" "+var);
+				System.out.println("store"+" "+var);
 				output.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		}else{
+			if(ctx.getChildCount()== 4 && (ctx.E.getText().matches("[0-9]+")|| ctx.E.getText().equals("true")|| ctx.E.getText().equals("false"))){
+				int num = visit(ctx.E);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num);
+					output.write("\n");
+					System.out.println("load "+num);
+					output.close();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
-		}
+			}else{
+			visit(ctx.E);	
+			}
+			try{
+				file = new FileWriter("intermediatecode.txt",true);
+				output = new BufferedWriter(file);
+				String var = ctx.id.getText();
+				output.write("store "+" "+var);
+				output.write("\n");
+				System.out.println("store "+var);
+				output.close();
+			}catch(IOException e){
+				e.printStackTrace();
+			}		
+			}
 		
-	
 		return 0;
 	}
 	
@@ -150,7 +113,6 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	
 	@Override
 	public Integer visitBOOL(MyGrammarParser.BOOLContext ctx) {
-		// TODO Auto-generated method stub
 		
 		int num = 0;
 		if(ctx.getText().equals("true"))
@@ -163,135 +125,352 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	
 	@Override
 	public Integer visitMUL(MyGrammarParser.MULContext ctx) {
-		
-		
-			if(ctx.getChild(1).getText().equals("*")){
-				try{
-					file = new FileWriter("intermediatecode.txt",true);
-					output = new BufferedWriter(file);	
-				output.write("load"+" "+ ctx.L.getText());
-				output.write("\n");
-			System.out.println("load"+" "+ ctx.L.getText());
-			output.write("load"+" "+ctx.R.getText());
-			output.write("\n");
-			output.write("mul");
-			output.write("\n");
-			System.out.println("load"+" "+ ctx.L.getText());
-			System.out.println("load"+" "+ctx.R.getText());
-			//output.write("\n");
-			System.out.println("mul");
-//			output.write("\n");
-			//System.out.println("mul");
-				output.close();
-				}catch(IOException e){
+			
+			if(ctx.getChild(1).getText().equals("*")){				
+				 
+					 if((!ctx.L.getText().matches("[0-9]+")) && (!ctx.R.getText().matches("[0-9]+"))){				 
+						 visit(ctx.L);
+						 visit(ctx.R);
+						 try{
+								file = new FileWriter("intermediatecode.txt",true);
+								output = new BufferedWriter(file);
+								output.write("mul");
+								output.write("\n");
+								System.out.println("mul");
+								output.close();
+						 }catch(IOException e){
+								e.printStackTrace();
+							}
+				}
+				else if((!ctx.L.getText().matches("[0-9]+")) && (ctx.R.getText().matches("[0-9]+"))){
+					visit(ctx.L);
+					int num = visit(ctx.R);
+					try{
+						file = new FileWriter("intermediatecode.txt",true);
+						output = new BufferedWriter(file);
+						output.write("load "+num);
+						output.write("\n");
+						output.write("mul");
+						output.write("\n");
+						System.out.println("load "+num);
+						System.out.println("mul");
+						output.close();
+					}catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				else if ((!ctx.R.getText().matches("[0-9]+")) && (ctx.L.getText().matches("[0-9]+"))){
+					visit(ctx.R);
+					int num = visit(ctx.L);
+					try{
+						file = new FileWriter("intermediatecode.txt",true);
+						output = new BufferedWriter(file);
+						output.write("load "+num);
+						output.write("\n");
+						output.write("mul");
+						output.write("\n");
+						System.out.println("load "+num);
+						System.out.println("mul");
+						output.close();
+					}catch(IOException e){
+						e.printStackTrace();
+					}
+				}else{			
+					int num1 = visit(ctx.L);
+					int num2 = visit(ctx.R);
+					try{
+						file = new FileWriter("intermediatecode.txt",true);
+						output = new BufferedWriter(file);
+						output.write("load "+num1);
+						output.write("\n");
+						output.write("load "+num2);
+						output.write("\n");
+						output.write("mul");
+						output.write("\n");
+						System.out.println("load "+num1);
+						System.out.println("load "+num2);
+						System.out.println("mul");
+						output.close();
+					}catch(IOException e){
 					e.printStackTrace();
+				}
 				}
 			}
 			else if(ctx.getChild(1).getText().equals("/")){
+				
+				if((!ctx.L.getText().matches("[0-9]+")) && (!ctx.R.getText().matches("[0-9]+"))){				 
+					 visit(ctx.L);
+					 visit(ctx.R);
+					 try{
+							file = new FileWriter("intermediatecode.txt",true);
+							output = new BufferedWriter(file);
+							output.write("div");
+							output.write("\n");
+							System.out.println("div");
+							output.close();
+					 }catch(IOException e){
+							e.printStackTrace();
+						}
+			}
+			else if((!ctx.L.getText().matches("[0-9]+")) && (ctx.R.getText().matches("[0-9]+"))){
+				visit(ctx.L);
+				int num = visit(ctx.R);
 				try{
 					file = new FileWriter("intermediatecode.txt",true);
-					output = new BufferedWriter(file);	
-					output.write("load"+" "+ ctx.R.getText());
+					output = new BufferedWriter(file);
+					output.write("load "+num);
 					output.write("\n");
-				System.out.println("load"+" "+ ctx.L.getText());
-				output.write("load"+" "+ctx.R.getText());
-				output.write("\n");
-				output.write("div");
-				output.write("\n");
-				System.out.println("load"+" "+ ctx.R.getText());
-				System.out.println("load"+" "+ctx.L.getText());
-				//output.write("\n");
-				System.out.println("div");
-//				output.write("\n");
-				//System.out.println("div");
-				output.close();
+					output.write("div");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("div");
+					output.close();
 				}catch(IOException e){
 					e.printStackTrace();
 				}
 			}
+			else if ((!ctx.R.getText().matches("[0-9]+")) && (ctx.L.getText().matches("[0-9]+"))){
+				visit(ctx.R);
+				int num = visit(ctx.L);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num);
+					output.write("\n");
+					output.write("div");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("div");
+					output.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}else{			
+				int num1 = visit(ctx.L);
+				int num2 = visit(ctx.R);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num1);
+					output.write("\n");
+					output.write("load "+num2);
+					output.write("\n");
+					output.write("div");
+					output.write("\n");
+					System.out.println("load "+num1);
+					System.out.println("load "+num2);
+					System.out.println("div");
+					output.close();
+				}catch(IOException e){
+				e.printStackTrace();
+			}
+			}
+		}
 			
 		return 0;
 	}
 	
 	@Override
 	public Integer visitADD(MyGrammarParser.ADDContext ctx) {
-		// TODO Auto-generated method stub
 		
 			if(ctx.getChild(1).getText().equals("+")){
+				
+				if((!ctx.L.getText().matches("[0-9]+")) && (!ctx.R.getText().matches("[0-9]+"))){				 
+					 visit(ctx.L);
+					 visit(ctx.R);
+					 try{
+							file = new FileWriter("intermediatecode.txt",true);
+							output = new BufferedWriter(file);
+							output.write("add");
+							output.write("\n");
+							System.out.println("add");
+							output.close();
+					 }catch(IOException e){
+							e.printStackTrace();
+						}
+			}
+			else if((!ctx.L.getText().matches("[0-9]+")) && (ctx.R.getText().matches("[0-9]+"))){
+				visit(ctx.L);
+				int num = visit(ctx.R);
 				try{
 					file = new FileWriter("intermediatecode.txt",true);
 					output = new BufferedWriter(file);
-					output.write("load"+" "+ ctx.L.getText());
+					output.write("load "+num);
 					output.write("\n");
-				System.out.println("load"+" "+ ctx.L.getText());
-				output.write("load"+" "+ctx.R.getText());
-				output.write("\n");
-				output.write("add");
-				output.write("\n");
-				System.out.println("load"+" "+ ctx.L.getText());
-				System.out.println("load"+" "+ctx.R.getText());
-				//output.write("\n");
-				System.out.println("add");
-//				output.write("\n");
-				//System.out.println("add");	
-			output.close();
+					output.write("add");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("add");
+					output.close();
 				}catch(IOException e){
 					e.printStackTrace();
 				}
+			}
+			else if ((!ctx.R.getText().matches("[0-9]+")) && (ctx.L.getText().matches("[0-9]+"))){
+				visit(ctx.R);
+				int num = visit(ctx.L);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num);
+					output.write("\n");
+					output.write("add");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("add");
+					output.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}else{			
+				int num1 = visit(ctx.L);
+				int num2 = visit(ctx.R);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num1);
+					output.write("\n");
+					output.write("load "+num2);
+					output.write("\n");
+					output.write("add");
+					output.write("\n");
+					System.out.println("load "+num1);
+					System.out.println("load "+num2);
+					System.out.println("add");
+					output.close();
+				}catch(IOException e){
+				e.printStackTrace();
+			}
+			}
+		
 			}
 			else if(ctx.getChild(1).getText().equals("-")){
+				if((!ctx.L.getText().matches("[0-9]+")) && (!ctx.R.getText().matches("[0-9]+"))){				 
+					 visit(ctx.L);
+					 visit(ctx.R);
+					 try{
+							file = new FileWriter("intermediatecode.txt",true);
+							output = new BufferedWriter(file);
+							output.write("sub");
+							output.write("\n");
+							System.out.println("sub");
+							output.close();
+					 }catch(IOException e){
+							e.printStackTrace();
+						}
+			}
+			else if((!ctx.L.getText().matches("[0-9]+")) && (ctx.R.getText().matches("[0-9]+"))){
+				visit(ctx.L);
+				int num = visit(ctx.R);
 				try{
 					file = new FileWriter("intermediatecode.txt",true);
 					output = new BufferedWriter(file);
-					output.write("load"+" "+ ctx.R.getText());
+					output.write("load "+num);
 					output.write("\n");
-				System.out.println("load"+" "+ ctx.L.getText());
-				output.write("load"+" "+ctx.L.getText());
-				output.write("\n");
-				output.write("sub");
-				output.write("\n");
-				System.out.println("load"+" "+ ctx.R.getText());
-				System.out.println("load"+" "+ctx.L.getText());
-				//output.write("\n");
-				System.out.println("sub");
-//				output.write("\n");
-				//System.out.println("sub");
-				output.close();
+					output.write("sub");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("sub");
+					output.close();
 				}catch(IOException e){
 					e.printStackTrace();
 				}
 			}
+			else if ((!ctx.R.getText().matches("[0-9]+")) && (ctx.L.getText().matches("[0-9]+"))){
+				visit(ctx.R);
+				int num = visit(ctx.L);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num);
+					output.write("\n");
+					output.write("sub");
+					output.write("\n");
+					System.out.println("load "+num);
+					System.out.println("sub");
+					output.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}else{			
+				int num1 = visit(ctx.L);
+				int num2 = visit(ctx.R);
+				try{
+					file = new FileWriter("intermediatecode.txt",true);
+					output = new BufferedWriter(file);
+					output.write("load "+num1);
+					output.write("\n");
+					output.write("load "+num2);
+					output.write("\n");
+					output.write("sub");
+					output.write("\n");
+					System.out.println("load "+num1);
+					System.out.println("load "+num2);
+					System.out.println("sub");
+					output.close();
+				}catch(IOException e){
+				e.printStackTrace();
+			}
+			}
+		}
 		return 0;
 	}
 	
 	@Override
 	public Integer visitOP(MyGrammarParser.OPContext ctx) {
-		
 			visit(ctx.L);
-			try{
-				file = new FileWriter("intermediatecode.txt",true);
-				output = new BufferedWriter(file);
-			output.write(" " +ctx.ROP.getText()+ " ");
-			System.out.print(" " +ctx.ROP.getText()+ " ");
-			output.close();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-			visit(ctx.R);
 			if (ctx.R.getText().matches("[0-9]+")){
 				try{
 					file = new FileWriter("intermediatecode.txt",true);
 					output = new BufferedWriter(file);
-				output.write((ctx.R.getText()));
-				output.write("\n");
-				System.out.println(Integer.parseInt(ctx.R.getText()));
-				output.close();
+					output.write(("load " + ctx.R.getText()));
+					output.write("\n");
+					System.out.println("load " + Integer.parseInt(ctx.R.getText()));
+					output.close();
 				}catch(IOException e){
 					e.printStackTrace();
 				}
+			}else{
+			visit(ctx.R);
 			}
-			
-		
+			String opr = "";
+			if(ctx.ROP.getText().equals("<")){
+					System.out.println("LE");
+					opr = "LE";
+					System.out.println("cond true");
+			}
+			else if (ctx.ROP.getText().equals(">")){
+				System.out.println("GE");
+				System.out.println("cond true");
+				opr = "GE";
+			}else if (ctx.ROP.getText().equals("<=")){
+				System.out.println("LEQ");
+				System.out.println("cond true");
+				opr = "LEQ";
+			}else if (ctx.ROP.getText().equals(">=")){
+				System.out.println("GEQ");
+				System.out.println("cond true");
+				opr = "GEQ";
+			}else if(ctx.ROP.getText().equals("==")){
+				System.out.println("EQ");
+				System.out.println("cond true");
+				opr = "EQ";
+			}else if(ctx.ROP.getText().equals("!=")){
+				System.out.println("NEQ");
+				System.out.println("cond true");
+				opr = "NEQ";
+		}
+			try{
+				file = new FileWriter("intermediatecode.txt",true);
+				output = new BufferedWriter(file);
+				output.write(opr);
+				output.write("\n");
+				output.write("cond true");
+				output.write("\n");
+				output.close();
+			}catch(IOException e){
+				e.printStackTrace();
+			}						
 		return 0;
 	}
 	
@@ -311,37 +490,34 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 				e.printStackTrace();
 			}
 		}else {
-			try{
-				file = new FileWriter("intermediatecode.txt",true);
-				output = new BufferedWriter(file);
-			output.write("mov" + " " + ctx.ID.getText() + ",");
-			System.out.print("mov" + " " + ctx.ID.getText() + ",");
-			output.close();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
 			if (ctx.aE.getText().matches("[0-9]+")){
 				try{
 					file = new FileWriter("intermediatecode.txt",true);
 					output = new BufferedWriter(file);
-				output.write(ctx.aE.getText());
-				output.write("\n");
-				System.out.println(ctx.aE.getText());	
-				output.close();
+					int num = visit(ctx.aE);
+					output.write("load "+ num);
+					output.write("\n");
+					System.out.println("load " + ctx.aE.getText());	
+					output.close();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
 			}
-			visit(ctx.aE);
+
+			try{
+				file = new FileWriter("intermediatecode.txt",true);
+				output = new BufferedWriter(file);
+			output.write("store" + " " + ctx.ID.getText());
+			System.out.println("store" + " " + ctx.ID.getText());
+			output.write("\n");
+			output.close();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+						visit(ctx.aE);
 
 		}
 		
-		return 0;
-	}
-	
-	@Override
-	public Integer visitType(MyGrammarParser.TypeContext ctx) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
@@ -350,8 +526,9 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
-			output.write(ctx.getText());
-			System.out.print(ctx.getText());
+			output.write("load " + ctx.getText());
+			output.write("\n");
+			System.out.println("load " + ctx.getText());
 			output.close();
 		}
 		catch(IOException e){
@@ -362,7 +539,6 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	
 	@Override
 	public Integer visitFunction(MyGrammarParser.FunctionContext ctx) {
-		//System.out.println("Inside function definition");
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
@@ -379,9 +555,16 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	
 	@Override
 	public Integer visitParameters(MyGrammarParser.ParametersContext ctx) {
-		//System.out.println(ctx.getChildCount());
 		visitChildren(ctx);
-		
+		try{
+			file = new FileWriter("intermediatecode.txt",true);
+			output = new BufferedWriter(file);
+			output.write("\n");
+			System.out.println();
+			output.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return 0;
 	}
 	
@@ -391,8 +574,8 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
-			output.write(ctx.getChild(0).getText() + " " + ctx.getChild(1).getText() + " " + "\n");
-			System.out.print(ctx.getChild(0).getText() + " " + ctx.getChild(1).getText() + " " + "\n");
+			output.write(ctx.getChild(0).getText() + " " + ctx.getChild(1).getText() + " " );
+			System.out.print(ctx.getChild(0).getText() + " " + ctx.getChild(1).getText() + " ");
 			output.close();
 		}catch(IOException e){
 			e.printStackTrace();
@@ -405,6 +588,8 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
+			System.out.println();
+			output.write("\n");
 			output.write("ret");
 			output.write("\n");
 			System.out.println("ret");
@@ -507,23 +692,15 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 			output = new BufferedWriter(file);
 			output.write("\n");
 			output.write("CHK ");
+			output.write("\n");
 			System.out.println();
-			System.out.print("CHK ");
+			System.out.println("CHK ");
 			output.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 			visit(ctx.exp);
-			try{
-				file = new FileWriter("intermediatecode.txt",true);
-				output = new BufferedWriter(file);
-			output.write("Cond True");
-			output.write("\n");
-			output.close();
-			System.out.println("Cond True");
-			}catch(IOException e){
-				e.printStackTrace();
-			}
+			
 			visit(ctx.st);
 			try{
 			file = new FileWriter("intermediatecode.txt",true);
@@ -540,7 +717,7 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 	}
 	@Override
 	public Integer visitElsestat(MyGrammarParser.ElsestatContext ctx) {
-		// TODO Auto-generated method stub
+	
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
@@ -571,31 +748,27 @@ public class MyGrammarVisitior extends MyGrammarBaseVisitor<Integer>{
 		try{
 			file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
-			//visitChildren(ctx);
 			output.write("WHILE ");
-			System.out.print("WHILE ");
+			output.write("\n");
+			System.out.println("WHILE ");
 			output.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 			visit(ctx.exp);
-			try{
-			file = new FileWriter("intermediatecode.txt",true);
-			output = new BufferedWriter(file);
-			output.write("Cond True");
-			output.write("\n");
-			System.out.println("Cond True");
-			output.close();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
+			
 			visit(ctx.st);
 			try{
 				file = new FileWriter("intermediatecode.txt",true);
 			output = new BufferedWriter(file);
+			output.write("\n");
+			output.write("gotowhile");
+			output.write("\n");
 			output.write("\nEndWhile");
 			output.write("\n");
-			System.out.println("\nEndWhile");
+			System.out.println();
+			System.out.println("gotowhile");
+			System.out.println("EndWhile");
 			output.close();
 		}catch(IOException e){
 			e.printStackTrace();
