@@ -1,5 +1,6 @@
 BEGIN
-decl main load 0
+decl main 
+load 0
 store n
 call fact 5
 store n
@@ -18,6 +19,17 @@ mul
 store b
 EndIf
 Cond False
-ret
+WHILE 
+load a
+load 1
+GE
+cond true
+load a
+load 1
+sub
+store a
+gotowhile
+EndWhile
 EndIfElse
+ret
 END
