@@ -7,7 +7,6 @@ ret
 decl fact int a 
 load 1
 store  b
-
 CHK 
 load a
 load 1
@@ -19,7 +18,6 @@ mul
 store b
 EndIf
 Cond False
-
 ret
 EndIfElse
 END
