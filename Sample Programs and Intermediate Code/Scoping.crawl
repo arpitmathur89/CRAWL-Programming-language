@@ -1,0 +1,16 @@
+BEGIN
+
+int a = 5
+int b = 7
+function int main(){
+	
+	display("a :")
+	display(a)
+	b = 2
+	display("b :")
+	display(b)
+		
+	return 0			
+}
+
+END

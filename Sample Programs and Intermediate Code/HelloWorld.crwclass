@@ -1,0 +1,6 @@
+BEGIN
+decl main 
+disp "Hello World"
+load 0
+ret
+END

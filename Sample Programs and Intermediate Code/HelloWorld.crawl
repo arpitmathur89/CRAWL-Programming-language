@@ -1,0 +1,10 @@
+BEGIN
+
+function int main(){
+	
+	display("Hello World")
+		
+	return 0			
+}
+
+END

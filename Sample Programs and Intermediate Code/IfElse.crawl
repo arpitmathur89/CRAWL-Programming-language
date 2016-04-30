@@ -1,0 +1,20 @@
+BEGIN
+
+int a = 5
+int b = 7
+
+function int show(){
+	if(a == 5)
+		display("a is 5")
+	else
+		display("a is not 5")
+	endif	
+}
+
+function int main(){
+	
+	show()
+	return 0			
+}
+
+END

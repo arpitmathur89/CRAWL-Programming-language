@@ -1,0 +1,22 @@
+BEGIN
+load 5
+store  a
+load 7
+store  b
+decl show 
+CHK 
+load a
+load 5
+EQ
+cond true
+disp "a is 5"
+
+EndIf
+cond false
+disp "a is not 5"
+EndIfElse
+decl main 
+call show
+load 0
+ret
+END

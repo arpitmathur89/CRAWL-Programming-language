@@ -1,0 +1,15 @@
+BEGIN
+load 5
+store  a
+load 7
+store  b
+decl main 
+disp "a :"
+disp a
+load 2
+store b
+disp "b :"
+disp b
+load 0
+ret
+END
