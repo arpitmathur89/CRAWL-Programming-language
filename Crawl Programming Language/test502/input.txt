@@ -1,0 +1,18 @@
+BEGIN
+function int fact(int n){
+	int result = 1
+        int fact = n
+	  while (n > 1)
+	   result = result * n
+	   n = n - 1
+	  endwhile
+          display("factorial value is")
+	  display(result)
+	return result	
+}
+
+function int main(){
+fact(5)
+return 0
+}
+END

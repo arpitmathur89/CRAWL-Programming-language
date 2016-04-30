@@ -1,0 +1,22 @@
+BEGIN
+decl main 
+load 3
+store  a
+load 6
+store  b
+load 1
+store  c
+load 5
+store  d
+load 0
+store e
+load a
+load b
+load c
+mul
+load d
+div
+add
+store e
+ret
+END

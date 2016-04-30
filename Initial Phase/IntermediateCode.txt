@@ -1,0 +1,74 @@
+BEGIN
+load 5
+store  a
+load 6
+store  b
+load 1
+store  c
+load 0
+store  g
+STACK s
+s.push 5
+s.push 7
+s.pop
+s.peek
+s.isEmpty
+decl main int a 
+call dance 7
+load 5
+store a
+load 0
+store  g
+load 0
+store e
+load a
+load b
+add
+store  f
+load a
+load b
+sub
+store  c
+load e
+load 6
+mul
+load 7
+div
+store  d
+load 2
+store  n
+WHILE 
+load n
+load 7
+LE
+cond true
+load n
+load 1
+sub
+store n
+gotowhile
+
+EndWhile
+disp b
+
+CHK 
+load n
+load 1
+EQ
+cond true
+load b
+load c
+add
+store a
+EndIf
+Cond False
+load 9
+store a
+EndIfElse
+
+ret
+decl dance int dan 
+disp "just testing"
+
+ret
+END

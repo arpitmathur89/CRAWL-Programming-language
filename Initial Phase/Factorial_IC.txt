@@ -1,0 +1,35 @@
+BEGIN
+decl main 
+load 0
+store n
+call fact 5
+store n
+ret
+decl fact int a 
+load 1
+store  b
+CHK 
+load a
+load 1
+EQ
+cond true
+load b
+load a
+mul
+store b
+EndIf
+Cond False
+WHILE 
+load a
+load 1
+GE
+cond true
+load a
+load 1
+sub
+store a
+gotowhile
+EndWhile
+EndIfElse
+ret
+END

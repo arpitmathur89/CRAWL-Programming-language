@@ -1,0 +1,43 @@
+BEGIN
+decl fact int n 
+
+load 1
+store  result
+
+load n
+store  fact
+WHILE 
+
+load n
+load 1
+GE
+cond true
+
+load result
+
+load n
+mul
+store result
+load n
+load 1
+sub
+store n
+gotowhile
+
+EndWhile
+
+disp "factorial value is"
+
+disp result
+
+load result
+ret
+
+decl main 
+call fact 5
+5
+
+load 0
+ret
+
+END

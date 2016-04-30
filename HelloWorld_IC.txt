@@ -1,5 +1,0 @@
-BEGIN
-decl main
-disp Hello World
-ret
-END

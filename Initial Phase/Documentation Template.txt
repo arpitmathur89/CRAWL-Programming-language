@@ -1,0 +1,18 @@
+Documentation - 
+
+Why this language?
+Softwares used. Backend language.
+
+Criteria -
+
+1. Operators supported
+2. data types supported
+3. Assignment statement
+4. if-else 
+5. while
+6. factorial
+7. Recursion
+8. Intermediate Keywords explain
+6. examples
+7. Screenshots - AST, IC, Output from runtime
+

@@ -1,0 +1,16 @@
+BEGIN
+load 5
+store g
+load 10
+store c
+decl main 
+load 5
+store a
+load 7
+store b
+load a
+load b
+mul
+load 0
+ret
+END

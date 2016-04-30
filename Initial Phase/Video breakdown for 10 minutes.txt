@@ -1,0 +1,12 @@
+Video -
+
+Intro - 25 seconds
+Motivation - 45 seconds
+Software and language used - 20 seconds
+Grammar screenshot - Run grammar to generate AST - 30 seconds
+High level language syntax explain and examples for assignment, func calls, looping, math ops, stack and other lang specific constraints - 2 min
+Intermediate - screenshot of the myvisitor - explain keywords - 2 min
+Runtime - demo and run directly to show results for various examples above and recursion - 3.5 min
+Future work and conclusion - 30 seconds
+
+
